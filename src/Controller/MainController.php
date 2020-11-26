@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\News;
+use App\Entity\TypeNews;
 use App\Service\ParseService;
 use Doctrine\Common\Collections\Criteria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -19,15 +20,19 @@ class MainController extends AbstractController
      */
     public function index(ParseService $parseService): Response
     {
-        $data = $parseService->parseNews('https://www.rbc.ru');
-        foreach ($data as $item) {
-            $news = new News();
-            $news->setTitle($item['title'])
-                ->setBody(isset($item['body']) ? $item['body'] : '')
-                ->setRbclink($item['link'])
-                ->setDatamodif($item['data_modif'])
-                ->setPreviewText(isset($item['preview_text']) ? $item['preview_text'] : '');
-            $this->getDoctrine()->getManager()->persist($news);
+        $typeNews = $this->getDoctrine()->getRepository(TypeNews::class)->findAll();
+        foreach ($typeNews as $news) {
+            $data = $parseService->parseNews($news);
+
+            foreach ($data as $item) {
+                $news = new News();
+                $news->setTitle($item['title'])
+                    ->setBody(isset($item['body']) ? $item['body'] : '')
+                    ->setRbclink($item['link'])
+                    ->setDatamodif($item['data_modif'])
+                    ->setPreviewText(isset($item['preview_text']) ? $item['preview_text'] : '');
+                $this->getDoctrine()->getManager()->persist($news);
+            }
         }
         $this->getDoctrine()->getManager()->flush();
         $news = $this->getDoctrine()->getRepository(News::class)->getAllByDateDesc();
