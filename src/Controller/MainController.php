@@ -58,7 +58,7 @@ class MainController extends AbstractController
 
     /**
      * @return Response
-     * @Route("/monitoring", name="home")
+     * @Route("/monitoring", name="monitoring")
      */
     public function getMonitoring()
     {
