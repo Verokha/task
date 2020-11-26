@@ -40,6 +40,7 @@ class NewsRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('n')
             ->orderBy('n.datamodif', Criteria::DESC)
+            ->andWhere("n.body != ''")
             ->getQuery()
             ->getResult();
     }

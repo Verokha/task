@@ -47,11 +47,25 @@ class MainController extends AbstractController
      * @param News $news
      * @Route("/news/{id}", name="news")
      * @ParamConverter("news", class="App\Entity\News")
+     * @return Response
      */
     public function item(News $news)
     {
         return $this->render('main/item.html.twig', [
             'news' => $news
+        ]);
+    }
+
+    /**
+     * @return Response
+     * @Route("/monitoring", name="home")
+     */
+    public function getMonitoring()
+    {
+        $data = $this->getDoctrine()->getRepository(News::class)->findBy(['body' => ""]);
+
+        return $this->render('main/monitoring.html.twig', [
+            'data' => $data
         ]);
     }
 }

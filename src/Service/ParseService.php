@@ -56,19 +56,20 @@ class ParseService
             $html = $this->getHtmlPageByUrl($item['link']);
             $linkWithoutGet = str_replace('?from=newsfeed', '', $item['link']);
 
-            $anotherDiv = '<div class="l-col-main" data-io-article-url="' . $linkWithoutGet . '">';
-            $div = '<div class="l-col-main" data-io-article-url="' . $item['link'] . '">';
+            $simpleBlock = '<div class="l-col-main" data-io-article-url="' . $linkWithoutGet . '">';
+            $anotherSimpleBlock = '<div class="l-col-main" data-io-article-url="' . $item['link'] . '">';
             $cryptoBlock = '<div class="article__content" data-io-article-url="'.$item['link'].'">';
             $anotherCryptoBlock = '<div class="article__content" data-io-article-url="'.$linkWithoutGet.'">';
+            $trendsBlock = '<div class="article__text" itemprop="articleBody">';
             $mainLink = null;
             switch (true) {
-                case (strpos($html, $anotherDiv) !== false):
+                case (strpos($html, $simpleBlock) !== false):
                     $afterMainBlock = '<div class="article__tags">';
-                    $mainBlock = $anotherDiv;
+                    $mainBlock = $simpleBlock;
                     break;
-                case (strpos($html, $div) !== false):
+                case (strpos($html, $anotherSimpleBlock) !== false):
                     $afterMainBlock = '<div class="article__tags">';
-                    $mainBlock = $anotherDiv;
+                    $mainBlock = $anotherSimpleBlock;
                     break;
                 case (strpos($html, $cryptoBlock) !== false):
                     $afterMainBlock = '<div class="article__authors">';
@@ -77,6 +78,10 @@ class ParseService
                 case (strpos($html, $anotherCryptoBlock) !== false):
                     $afterMainBlock = '<div class="article__authors">';
                     $mainBlock = $anotherCryptoBlock;
+                    break;
+                case (strpos($html, $trendsBlock) !== false):
+                    $afterMainBlock = '<div class="article__authors">';
+                    $mainBlock = $trendsBlock;
                     break;
                 default:
                     continue 2;

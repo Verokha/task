@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}News list{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    </style>
+
+    <div style="font: 18px/1.5 sans-serif;">
+        <h1>Не прошедшие новости</h1>
+        {% for item in data %}
+            <div style="outline: 2px solid #000;">
+                <p>{{ item.title }}</p>
+                <p>{{ item.PreviewText }}</p>
+                <a target="_blank" href="{{ item.rbclink }}">Ссылка на rbc</a>
+                <br>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
